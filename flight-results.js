@@ -146,11 +146,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function handleSeatClick(event, seatId) {
+        const searchCriteria = JSON.parse(sessionStorage.getItem('flightSearchCriteria'));
+        const totalPassengers = parseInt(searchCriteria.adults) + parseInt(searchCriteria.children);
         const seatElement = event.currentTarget;
         if (seatElement.classList.contains('selected')) {
             seatElement.classList.remove('selected');
             selectedSeats = selectedSeats.filter(s => s !== seatId);
         } else {
+            if (selectedSeats.length >= totalPassengers) {
+                showNotification(`Maksimum ${totalPassengers} koltuk seçebilirsiniz.`, 'error');
+                return;
+            }
             seatElement.classList.add('selected');
             selectedSeats.push(seatId);
         }
@@ -290,7 +296,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     confirmSeatSelectionBtn.addEventListener('click', () => {
-        if (selectedFlight && selectedSeats.length > 0) {
+        const searchCriteria = JSON.parse(sessionStorage.getItem('flightSearchCriteria'));
+        const totalPassengers = parseInt(searchCriteria.adults) + parseInt(searchCriteria.children);
+
+        if (selectedFlight && selectedSeats.length === totalPassengers) {
             const totalCost = selectedFlight.basePrice * selectedSeats.length;
             const bookingDetails = {
                 ...selectedFlight,
@@ -300,8 +309,8 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             sessionStorage.setItem('bookingDetails', JSON.stringify(bookingDetails));
             window.location.href = 'personal-info.html';
-        } else if (selectedFlight && selectedSeats.length === 0) {
-            showNotification('Lütfen en az bir koltuk seçin.', 'error');
+        } else if (selectedFlight && selectedSeats.length !== totalPassengers) {
+            showNotification(`Lütfen ${totalPassengers} koltuk seçin.`, 'error');
         } else {
             showNotification('Koltuk seçimi için bir uçuş seçilmedi.', 'error');
         }
