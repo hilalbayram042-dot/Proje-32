@@ -686,3 +686,23 @@ button[type="submit"]:hover {
 .login-now-btn:hover {
     background-color: #002244;
 }
+
+/* Style for cancel ticket button */
+.cancel-ticket-btn {
+    background-color: #dc3545; /* Red */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+    display: block;
+    width: 100%;
+}
+
+.cancel-ticket-btn:hover {
+    background-color: #c82333; /* Darker Red */
+}

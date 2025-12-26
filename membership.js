@@ -67,11 +67,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p>Toplam Tutar: ${bookingDetails.finalPrice.toFixed(2)} TL</p>
                     <h4>Yolcu Bilgileri:</h4>
                     ${bookingDetails.passengers.map(p => `<p>${p.name} ${p.surname} (TC: ${p.tc || 'N/A'})</p>`).join('')}
+                    <button class="cancel-ticket-btn" data-pnr="${bookingDetails.pnr}">Bileti İptal Et</button>
                 `;
                 ticketListDiv.appendChild(ticketItem);
             });
         } else {
             ticketListDiv.innerHTML = '<p data-translate="no_purchased_tickets">Henüz satın alınmış biletiniz bulunmamaktadır.</p>';
+        }
+    }
+
+    function handleCancelTicket(pnr) {
+        if (confirm('Bu bileti iptal etmek istediğinizden emin misiniz?')) {
+            let purchasedTickets = JSON.parse(localStorage.getItem('purchasedTickets')) || [];
+            // When comparing PNRs, ensure both are treated as strings
+            purchasedTickets = purchasedTickets.filter(ticket => String(ticket.pnr) !== String(pnr));
+            localStorage.setItem('purchasedTickets', JSON.stringify(purchasedTickets));
+            renderPurchasedTickets();
+            alert('Bilet başarıyla iptal edildi.');
         }
     }
 
@@ -166,6 +178,15 @@ document.addEventListener('DOMContentLoaded', () => {
             loginFormSection.style.display = 'block';
             registerFormSection.style.display = 'none';
             loginForm.reset(); // Clear login form fields
+        });
+    }
+
+    if (ticketListDiv) {
+        ticketListDiv.addEventListener('click', (event) => {
+            if (event.target.classList.contains('cancel-ticket-btn')) {
+                const pnr = event.target.dataset.pnr;
+                handleCancelTicket(pnr);
+            }
         });
     }
 
