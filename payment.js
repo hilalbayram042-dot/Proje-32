@@ -27,9 +27,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle payment button click
     payBtn.addEventListener('click', () => {
-        // Basic validation
-        if (!cardNumberInput.value || !cardNameInput.value || !expiryDateInput.value || !cvcInput.value) {
-            alert('Lütfen tüm kredi kartı bilgilerini eksiksiz girin.');
+        const cardName = cardNameInput.value.trim();
+        const cardNumber = cardNumberInput.value.replace(/\s/g, '');
+        const expiryDate = expiryDateInput.value.replace('/', '');
+        const cvc = cvcInput.value;
+
+        if (!cardName) {
+            alert('Lütfen kart üzerindeki ismi girin.');
+            return;
+        }
+
+        // Card Number validation
+        if (!/^\d{16}$/.test(cardNumber)) {
+            alert('Kart numarası tam olarak 16 rakamdan oluşmalıdır.');
+            return;
+        }
+
+        // CVC validation
+        if (!/^\d{3}$/.test(cvc)) {
+            alert('CVC kodu tam olarak 3 rakamdan oluşmalıdır.');
+            return;
+        }
+
+        // Expiry Date validation
+        if (!/^\d{4}$/.test(expiryDate)) {
+            alert('Son kullanma tarihi AA/YY formatında 4 rakam olmalıdır (örn: 0528).');
+            return;
+        }
+
+        const month = parseInt(expiryDate.substring(0, 2), 10);
+        const year = parseInt(expiryDate.substring(2, 4), 10);
+        const currentYear = new Date().getFullYear() % 100;
+        const currentMonth = new Date().getMonth() + 1;
+
+        if (month < 1 || month > 12) {
+            alert('Geçersiz ay. Ay 01 ile 12 arasında olmalıdır.');
+            return;
+        }
+
+        if (year < currentYear || (year === currentYear && month < currentMonth)) {
+            alert('Kartınızın son kullanma tarihi geçmiş.');
             return;
         }
 
