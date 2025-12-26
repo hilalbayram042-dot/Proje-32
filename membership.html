@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate="membership_page_title">Üyelik / Giriş Yap</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1 data-translate="membership_login_heading">Üyelik / Giriş Yap</h1>
+    </header>
+    <main>
+        <section id="loginFormSection" class="membership-form">
+            <form id="loginForm">
+                <h2 data-translate="login_heading">Giriş Yap</h2>
+                <div class="form-group">
+                    <label for="loginEmail" data-translate="email_label">E-posta:</label>
+                    <input type="email" id="loginEmail" name="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword" data-translate="password_label">Şifre:</label>
+                    <input type="password" id="loginPassword" name="loginPassword" required>
+                </div>
+                <button type="submit" data-translate="login_button">Giriş Yap</button>
+            </form>
+            <p data-translate="no_account_prompt">Hesabın yok mu? <a href="#" id="showRegisterFormLink" class="button primary-button" data-translate="register_now_link">Üye Ol</a></p>
+        </section>
+
+        <section id="registerFormSection" class="membership-form" style="display: none;">
+            <form id="registerForm">
+                <h2 data-translate="register_heading">Üye Ol</h2>
+                <div class="form-group">
+                    <label for="regFirstName" data-translate="first_name_label">Ad:</label>
+                    <input type="text" id="regFirstName" name="regFirstName" required>
+                </div>
+                <div class="form-group">
+                    <label for="regLastName" data-translate="last_name_label">Soyad:</label>
+                    <input type="text" id="regLastName" name="regLastName" required>
+                </div>
+                <div class="form-group">
+                    <label for="regTc" data-translate="tc_number_label">TC Kimlik No:</label>
+                    <input type="text" id="regTc" name="regTc" pattern="[0-9]{11}" title="Please enter a valid 11-digit TC Kimlik No" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPhone" data-translate="phone_number_label">Telefon Numarası:</label>
+                    <input type="tel" id="regPhone" name="regPhone" pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number" required>
+                </div>
+                <div class="form-group">
+                    <label for="regEmail" data-translate="email_label">E-posta:</label>
+                    <input type="email" id="regEmail" name="regEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPassword" data-translate="password_label">Şifre:</label>
+                    <input type="password" id="regPassword" name="regPassword" required>
+                </div>
+                <button type="submit" data-translate="register_button">Üye Ol</button>
+            </form>
+            <p data-translate="have_account_prompt">Zaten hesabın var mı? <a href="#" id="showLoginForm" data-translate="login_now_link">Şimdi Giriş Yap!</a></p>
+        </section>
+
+        <section id="loggedInSection" style="display: none;">
+            <p data-translate="welcome_message" id="welcomeMessage">Hoş Geldiniz, [Kullanıcı Adı]!</p>
+        </section>
+
+        <section id="myTicketsSection" class="ticket-info" style="display: none;">
+            <h2 data-translate="my_tickets_heading">Satın Aldığım Biletler</h2>
+            <div class="ticket-list" id="ticketList">
+                <p data-translate="no_purchased_tickets">Henüz satın alınmış biletiniz bulunmamaktadır.</p>
+            </div>
+        </section>
+        <button id="logoutButton" class="button primary-button" data-translate="logout_button">Çıkış Yap</button>
+    </main>
+    <footer>
+        <p>&copy; 2025 Flight Reservation System</p>
+    </footer>
+    <script src="translation.js"></script> <!-- Ensure translation.js is loaded -->
+    <script src="membership.js"></script>
+</body>
+</html>

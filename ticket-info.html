@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate="ticket_info_title">Alınan Bilet Bilgileri</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1 data-translate="purchased_tickets_heading">Alınan Bilet Bilgileri</h1>
+    </header>
+    <main>
+        <div class="container">
+            <section class="ticket-info">
+                <h2 data-translate="your_tickets">Biletleriniz</h2>
+                <div class="ticket-list" id="ticketList">
+                    <!-- Ticket information will be loaded here -->
+                    <p data-translate="no_tickets_found">Henüz alınmış biletiniz bulunmamaktadır.</p>
+                </div>
+            </section>
+            <div class="button-container">
+                <a href="index.html" class="button primary-button" data-translate="return_to_home">Ana Sayfaya Dön</a>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2025 Flight Reservation System</p>
+    </footer>
+    <script src="translation.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // This is a placeholder. In a real application, you would fetch
+            // ticket information from a backend based on the logged-in user.
+            const ticketList = document.getElementById('ticketList');
+            const hasTickets = false; // Simulate if user has tickets
+
+            if (hasTickets) {
+                // Example of how a ticket might look
+                ticketList.innerHTML = `
+                    <div class="ticket-item">
+                        <h3>Uçuş Numarası: XYZ123</h3>
+                        <p>Kalkış: İstanbul (IST) - 26 Aralık 2025, 10:00</p>
+                        <p>Varış: Ankara (ESB) - 26 Aralık 2025, 11:00</p>
+                        <p>Yolcu: [Ad Soyad]</p>
+                        <p>Koltuk No: 12A</p>
+                    </div>
+                    <div class="ticket-item">
+                        <h3>Uçuş Numarası: ABC456</h3>
+                        <p>Kalkış: İzmir (ADB) - 15 Ocak 2026, 14:00</p>
+                        <p>Varış: Antalya (AYT) - 15 Ocak 2026, 15:00</p>
+                        <p>Yolcu: [Ad Soyad]</p>
+                        <p>Koltuk No: 05F</p>
+                    </div>
+                `;
+            } else {
+                ticketList.innerHTML = `<p data-translate="no_tickets_found">Henüz alınmış biletiniz bulunmamaktadır.</p>`;
+            }
+        });
+    </script>
+</body>
+</html>

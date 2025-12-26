@@ -1,0 +1,688 @@
+html {
+    height: 100%;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #101727; /* Night Blue FALLBACK */
+    color: #C0C0C0; /* Silver */
+    background-image: url('arkaplan2.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    min-height: 100%;
+    box-sizing: border-box;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #101727; /* Lighter Night Blue */
+    padding: 20px 40px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 191, 255, 0.2); /* Subtle blue glow */
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #005a87; /* Night Blue border */
+    padding-bottom: 20px;
+}
+
+header h1 {
+    color: #000000; /* Black */
+    margin: 0;
+}
+
+.search-form {
+    background-color: #1a233a;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.search-form h2 {
+    text-align: center;
+    color: #C0C0C0; /* Silver */
+    margin-bottom: 20px;
+}
+
+/* New styles for trip type radio buttons */
+.trip-type-group {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    justify-content: center;
+}
+
+.trip-type-group div {
+    display: flex;
+    align-items: center;
+}
+
+.trip-type-group label {
+    margin-left: 5px;
+    font-weight: normal;
+}
+
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group input[type="tel"],
+.form-group input[type="email"],
+.form-group input[type="number"],
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #005a87;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #333e5b; /* Silver-like dark gray */
+    color: #EAEAEA; /* Light silver text for contrast */
+}
+
+/* Style for disabled inputs */
+.form-group input:disabled {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background-color: #003366; /* Darker Night Blue */
+    color: #C0C0C0; /* Silver */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #002244; /* Even Darker Night Blue */
+}
+
+.results-container {
+    margin-top: 30px;
+}
+
+.flight {
+    background-color: #253150;
+    border: 1px solid #005a87;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.flight:hover {
+    background-color: #3a4a6b;
+}
+
+.flight-info span {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.flight-price {
+    font-size: 22px;
+    font-weight: bold;
+    color: #C0C0C0; /* Silver */
+}
+
+/* Styles for passenger inputs */
+.passenger-group {
+    display: flex;
+    gap: 20px;
+}
+
+.passenger-group .form-group {
+    flex: 1;
+}
+
+
+/* Styles for sort dropdown */
+.sort-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.sort-container label {
+    margin-right: 10px;
+    font-weight: 600;
+}
+
+.sort-container select {
+    padding: 8px;
+    border: 1px solid #005a87; /* Night Blue border */
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* Notification Styles */
+.notification-area {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    color: #fff;
+    text-align: center;
+    display: none; /* Hidden by default */
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.notification-area.show {
+    display: block;
+    opacity: 1;
+}
+
+.notification-area.error {
+    background-color: #dc3545; /* Red for error */
+}
+
+.notification-area.success {
+    background-color: #413f81;
+    color: #C0C0C0; /* Silver */
+}
+/* Seat Modal Styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal.show {
+    display: flex; /* Show the modal */
+}
+
+.modal-content {
+    background-color: #1a233a;
+    color: #C0C0C0;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #005a87;
+    width: 80%;
+    max-width: 800px;
+    border-radius: 8px;
+    position: relative;
+    box-shadow: 0 4px 8px 0 rgba(0,191,255,0.2), 0 6px 20px 0 rgba(0,191,255,0.19);
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+
+/* Add Animation */
+@keyframes animatetop {
+    from {top: -300px; opacity: 0}
+    to {top: 0; opacity: 1}
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.seat-class-selection {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.seat-class-selection button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.seat-class-selection button:hover {
+    background-color: #0056b3;
+}
+
+.seat-class-selection button.active {
+    background-color: #0056b3;
+    border: 2px solid #004085;
+}
+
+.seat-map-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 10px;
+    border: 1px solid #005a87;
+    border-radius: 5px;
+    background-color: #101727;
+    align-items: center;
+}
+
+.cabin-section {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 15px 0;
+    background-color: #1a233a;
+    border-radius: 5px;
+}
+
+.cabin-item {
+    width: 60px;
+    height: 40px;
+    background-color: #253150;
+    border: 1px solid #005a87;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
+    font-weight: bold;
+    color: #C0C0C0;
+}
+
+.wc-cabin {
+    background-color: #5a2d34;
+    border-color: #f5c6cb;
+}
+
+.galley-cabin {
+    background-color: #2d5a5a;
+    border-color: #bee5eb;
+}
+
+.seat-section {
+    display: grid;
+    gap: 5px;
+    width: 100%;
+    padding: 10px 0;
+    background-color: #1a233a;
+    border-radius: 5px;
+    border: 1px dashed #005a87;
+    box-sizing: border-box;
+}
+
+.row-label {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    font-weight: bold;
+    color: #888;
+    grid-column: 1;
+}
+
+.seat {
+    width: 30px;
+    height: 30px;
+    background-color: #3a4a6b;
+    border: 1px solid #005a87;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.2s ease;
+}
+
+.seat.available:hover {
+    background-color: #4CAF50;
+}
+
+.seat.selected {
+    background-color: #28a745;
+    color: white;
+}
+
+.seat.unavailable {
+    background-color: #dc3545;
+    cursor: not-allowed;
+    color: white;
+}
+
+.aisle {
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-actions {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.modal-actions button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.modal-actions button:hover {
+    background-color: #218838;
+}
+
+/* Style for the final booking button */
+#confirm-booking-btn, #pay-btn, #home-btn {
+    width: 100%;
+    padding: 15px; /* Larger padding */
+    background-color: #003366; /* Dark Blue */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 18px; /* Larger font size */
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+#confirm-booking-btn:hover, #pay-btn:hover, #home-btn:hover {
+    background-color: #002244; /* Darker blue on hover */
+}
+
+#pay-btn:disabled {
+    background-color: #002244;
+    cursor: not-allowed;
+}
+
+/* Passenger form styling */
+.passenger-form, .payment-form, .payment-summary, .confirmation-message {
+    background-color: #253150;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #005a87;
+}
+
+.passenger-form h3, .payment-form h3, .payment-summary h3 {
+    margin-top: 0;
+    border-bottom: 1px solid #005a87;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.form-group-row {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+.form-group-row .form-group {
+    flex: 1;
+}
+
+.total-amount {
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: right;
+    color: #4CAF50;
+}
+
+.confirmation-message p {
+    font-size: 1.1em;
+    line-height: 1.6;
+    text-align: center;
+}
+
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    color: white; /* Default text color for buttons */
+}
+
+.primary-button {
+    background-color: #003366; /* Dark Blue */
+}
+
+.primary-button:hover {
+    background-color: #002244; /* Darker blue on hover */
+}
+
+.contact-info {
+    background-color: #253150;
+    border: 1px solid #005a87;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.contact-page header h1 {
+    color: #fff;
+}
+
+.flights-page header h1 {
+    color: #fff;
+}
+
+.reviews-page header h1 {
+    color: #fff;
+}
+
+.cancel-reservation-page header h1 {
+    color: #fff;
+}
+
+.reservation-page header h1 {
+    color: #fff;
+}
+
+.flight-results-page header h1 {
+    color: #fff;
+}
+
+.confirmation-page header h1 {
+    color: #fff;
+}
+
+.payment-page header h1 {
+    color: #fff;
+}
+
+#back-btn {
+    display: block !important;
+    visibility: visible !important;
+    background-color: #ff0000 !important; /* Bright red */
+    color: #ffffff !important; /* White text */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    width: auto;
+    font-size: 16px;
+}
+
+#reservation-number {
+    background-color: #ffffff !important; /* White */
+    color: #000000 !important; /* Black text */
+}
+
+.personal-info-page header h1 {
+    color: #ffffff; /* White */
+}
+
+.personal-info-page .passenger-form {
+    background-color: #f9f9f9;
+    color: #000000;
+    border: 1px solid #ddd;
+}
+
+.personal-info-page .passenger-form h3 {
+    color: #000000;
+    border-bottom: 1px solid #ddd;
+}
+
+.personal-info-page .passenger-form label {
+    color: #000000;
+}
+
+/* Styles for membership page */
+.membership-form {
+    background-color: #253150;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #005a87;
+    max-width: 500px; /* Limit width for better appearance */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#welcomeMessage {
+    font-size: 1.5em;
+    text-align: center;
+    color: black;
+}
+
+.membership-form .form-group input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #005a87;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #333e5b; /* Silver-like dark gray */
+    color: #EAEAEA; /* Light silver text for contrast */
+}
+
+.membership-form h1 {
+    color: #C0C0C0; /* Silver */
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #005a87;
+    padding-bottom: 10px;
+}
+
+/* Styles for ticket-info page */
+.ticket-info {
+    background-color: #253150;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #005a87;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.ticket-info h1, .ticket-info h2 {
+    color: #C0C0C0; /* Silver */
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #005a87;
+    padding-bottom: 10px;
+}
+
+.ticket-list {
+    margin-top: 20px;
+}
+
+.ticket-item {
+    background-color: #1a233a;
+    border: 1px solid #005a87;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+
+.ticket-item h3 {
+    color: #00bfff; /* Deep Sky Blue */
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.ticket-item p {
+    margin: 5px 0;
+    font-size: 0.95em;
+}
+
+.login-prompt {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+.login-now-btn {
+    background-color: #285868;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.login-now-btn:hover {
+    background-color: #002244;
+}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate="cancel_reservation_title">Rezervasyon İptali</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="welcome.css">
+</head>
+<body class="cancel-reservation-page">
+    <div class="container">
+        <header>
+            <h1 data-translate="cancel_reservation_title">Rezervasyon İptali</h1>
+        </header>
+        <main>
+            <p data-translate="cancel_reservation_text">Rezervasyonunuzu iptal etmek için lütfen rezervasyon numaranızı girin.</p>
+            <form id="cancel-form">
+                <div class="form-group">
+                    <label for="reservation-number" data-translate="reservation_number_label">Rezervasyon Numarası:</label>
+                    <input type="text" id="reservation-number" required>
+                </div>
+                <button type="submit" data-translate="cancel_button">İptal Et</button>
+            </form>
+            <div class="form-group">
+                <button id="back-btn" data-translate="back_button">Geri Dön</button>
+            </div>
+        </main>
+    </div>
+    <script src="translation.js"></script>
+    <script>
+        document.getElementById('back-btn').addEventListener('click', () => {
+            window.history.back();
+        });
+
+        document.getElementById('cancel-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            alert('Rezervasyon iptal talebiniz alınmıştır. İşleminiz en kısa sürede tamamlanacaktır.'); // Placeholder for actual cancellation logic
+            // In a real application, you would send this data to a server
+        });
+    </script>
+</body>
+</html>

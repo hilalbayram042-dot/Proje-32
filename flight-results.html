@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate="flight_results_page_title">Uçuş Sonuçları</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="welcome.css">
+</head>
+<body class="flight-results-page">
+    <div class="container">
+        <header>
+            <h1 data-translate="flight_results_title">Uçuş Sonuçları</h1>
+        </header>
+        <main>
+            <div id="flight-results" class="results-container">
+                <div id="sort-container" class="sort-container" style="display: none;">
+                    <label for="sort-by" data-translate="sort_by">Sırala:</label>
+                    <select id="sort-by" name="sort-by">
+                        <option value="price" data-translate="price_ascending">Fiyata Göre (Artan)</option>
+                        <option value="time" data-translate="by_departure_time">Kalkış Saatine Göre</option>
+                    </select>
+                </div>
+                <!-- Uçuş sonuçları buraya gelecek -->
+            </div>
+        </main>
+        <div class="form-group">
+            <button id="back-btn" onclick="history.back()" data-translate="go_back_button">Geri Dön</button>
+        </div>
+    </div>
+    <div id="seat-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2 data-translate="seat_selection">Koltuk Seçimi</h2>
+            <div class="seat-class-selection">
+                <button id="business-class-btn" class="active" data-translate="business_class_label">Business</button>
+                <button id="economy-class-btn" data-translate="economy_class_label">Economy</button>
+            </div>
+            <div id="seat-map-container" class="seat-map-container">
+                <!-- Seat map will be rendered here by JavaScript -->
+            </div>
+            <div class="modal-actions">
+                <button id="confirm-seat-selection-btn" data-translate="confirm_seats">Koltukları Onayla</button>
+            </div>
+        </div>
+    </div>
+    <script src="flight-results.js"></script>
+    <script src="translation.js"></script>
+</body>
+</html>

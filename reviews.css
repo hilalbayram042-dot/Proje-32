@@ -1,0 +1,180 @@
+body {
+    background-image: url('arkaplan2.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.review {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.review-author {
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #000;
+}
+
+.star-rating span {
+    color: #f39c12;
+    font-size: 1.2em;
+}
+
+.review-text {
+    font-size: 1em;
+    line-height: 1.5;
+    color: #000;
+}
+
+#review-form-container {
+    background-color: #010126; /* Night blue */
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 8px rgba(241, 237, 237, 0.905);
+}
+
+#review-form-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #fff; /* Changed to white */
+}
+
+#review-form .form-group {
+    margin-bottom: 15px;
+}
+
+#review-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #fff; /* Changed to white */
+}
+
+#review-form input[type="text"],
+#review-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #fff;
+}
+
+#review-form button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #111163;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+#review-form button[type="submit"]:hover {
+    background-color: #10187c;
+}
+
+.star-input {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+
+.star-input span {
+    font-size: 2.5em;
+    color: #ddd;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.star-input span:hover,
+.star-input span:hover ~ span {
+    color: #f39c12;
+}
+
+.star-input span.selected,
+.star-input span.selected ~ span {
+    color: #f39c12;
+}
+
+.review-actions {
+    margin-top: 10px;
+    text-align: right;
+}
+
+.review-actions button {
+    background-color: transparent;
+    border: 1px solid #05052d;
+    color: #05052d;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 10px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.review-actions button:hover {
+    background-color: #05052d;
+    color: white;
+}
+
+.review-actions .delete-btn:hover {
+    background-color: #e65a50;
+    color: white;
+    border-color: #e65a50;
+}
+
+#example-reviews {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #e9e9e9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.example-review-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+
+.example-review-item .star-rating {
+    margin-bottom: 10px;
+    text-align: left; /* Align stars to the left within the example review item */
+}
+
+.example-review-item .star-rating span {
+    font-size: 1.5em; /* Slightly larger stars for emphasis */
+    color: #f39c12; /* Golden color for selected stars */
+}
+
+.example-review-item p {
+    margin-bottom: 5px;
+    color: #555;
+    line-height: 1.5;
+}
+
+.example-review-author {
+    font-weight: bold;
+    text-align: right;
+    color: #05052d;
+    font-size: 0.9em;
+}

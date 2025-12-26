@@ -1,0 +1,186 @@
+/* General Styling */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #fff;
+    background-image: url('arkaplan2.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+body.welcome-page {
+    background-color: #101727; /* Test için koyu arka plan */
+    min-height: 100vh;
+}
+
+.welcome-page .container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    /* Test için arka plan rengi yok */
+}
+
+/* Navigation Bar */
+.navbar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 20px 40px;
+    background: rgba(0, 0, 0, 0.4);
+    animation: slideDown 1s ease-out;
+}
+
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.nav-links a:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.navbar-cancel-button {
+    background-color: #e74c3c; /* Red color for cancellation */
+    color: #fff;
+    padding: 5px 10px; /* Smaller padding to fit in navbar */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem; /* Consistent with nav-links font size */
+    transition: background 0.3s ease;
+}
+
+.navbar-cancel-button:hover {
+    background-color: #c0392b; /* Darker red on hover */
+}
+
+/* Main Content */
+.content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 20px;
+    animation: fadeInUp 1s ease-out 0.5s;
+    animation-fill-mode: both; /* Ensures the element stays in its final animated state */
+}
+
+.content h1 {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+}
+
+.content p {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+}
+
+.cancel-reservation-button {
+    background-color: #e74c3c; /* Red color for cancellation */
+    color: #fff;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 20px; /* Space from the paragraph above */
+}
+
+.cancel-reservation-button:hover {
+    background-color: #c0392b; /* Darker red on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+}
+
+/* Language Selector */
+.language-selector {
+    position: relative;
+    margin-left: 20px;
+}
+
+.language-btn {
+    background: none;
+    border: 1px solid #fff;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.language-btn::before {
+    content: '🌐'; /* Globe unicode character */
+    margin-right: 5px;
+}
+
+.language-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    list-style: none;
+    padding: 10px;
+    margin: 5px 0 0 0;
+    border-radius: 5px;
+    min-width: 120px;
+    z-index: 1000;
+}
+
+.language-dropdown.show {
+    display: block;
+}
+
+.language-dropdown a {
+    color: #fff;
+    text-decoration: none;
+    display: block;
+    padding: 5px;
+    transition: background 0.2s;
+}
+
+.language-dropdown a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+
+/* Keyframe Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-100%); }
+    to { transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

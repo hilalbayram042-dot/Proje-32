@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate="reservation_page_title">Uçuş Arama</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="welcome.css">
+</head>
+<body class="reservation-page">
+    <div class="container">
+        <header>
+            <h1 data-translate="flight_reservation_system">Uçuş Rezervasyon Sistemi</h1>
+        </header>
+        <main>
+            <div id="notification-area" class="notification-area"></div>
+            <div class="search-form">
+                <h2 data-translate="search_flights">Uçuş Ara</h2>
+                <form id="flight-search-form">
+                    <div class="form-group trip-type-group">
+                        <div>
+                            <input type="radio" id="round-trip" name="trip-type" value="round-trip" checked>
+                            <label for="round-trip" data-translate="round_trip">Gidiş-Dönüş</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="one-way" name="trip-type" value="one-way">
+                            <label for="one-way" data-translate="one_way">Tek Yön</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="connecting-flight" name="connecting-flight">
+                            <label for="connecting-flight" data-translate="connecting_flight">Aktarmalı Uçuş</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="from" data-translate="from">Nereden</label>
+                        <select id="from" name="from" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="to" data-translate="to">Nereye</label>
+                        <select id="to" name="to" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="departure-date" data-translate="departure_date">Gidiş Tarihi</label>
+                        <input type="date" id="departure-date" name="departure-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="return-date" data-translate="return_date">Dönüş Tarihi</label>
+                        <input type="date" id="return-date" name="return-date">
+                    </div>
+                    <div class="passenger-group">
+                        <div class="form-group">
+                            <label for="adults" data-translate="adults">Yetişkin</label>
+                            <input type="number" id="adults" name="adults" value="1" min="1" max="9">
+                        </div>
+                        <div class="form-group">
+                            <label for="children" data-translate="children">Çocuk</label>
+                            <input type="number" id="children" name="children" value="0" min="0" max="9">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" data-translate="search_flights_button">Uçuş Ara</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+        <div class="form-group">
+            <button id="back-btn" onclick="history.back()" data-translate="go_back_button">Geri Dön</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+    <script src="translation.js"></script>
+    <script src="cities.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const fromSelect = document.getElementById('from');
+            const toSelect = document.getElementById('to');
+
+            function addPlaceholder(selectElement) {
+                const placeholder = document.createElement('option');
+                placeholder.value = "";
+                placeholder.textContent = "Şehir Seçin"; // Fallback text
+                placeholder.setAttribute('data-translate', 'select_city');
+                placeholder.disabled = true;
+                placeholder.selected = true;
+                selectElement.appendChild(placeholder);
+            }
+
+            addPlaceholder(fromSelect);
+            addPlaceholder(toSelect);
+
+            cities.forEach(city => {
+                const option1 = document.createElement('option');
+                option1.value = city;
+                option1.textContent = city;
+                fromSelect.appendChild(option1);
+
+                const option2 = document.createElement('option');
+                option2.value = city;
+                option2.textContent = city;
+                toSelect.appendChild(option2);
+            });
+            
+            // Re-translate the page to catch the new elements
+            if (typeof translatePage === 'function') {
+                const savedLang = localStorage.getItem('language') || 'tr';
+                // The translations might not be loaded yet, so we wait for them
+                loadTranslations(savedLang).then(() => {
+                    translatePage(savedLang);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

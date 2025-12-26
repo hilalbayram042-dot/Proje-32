@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate="customer_reviews_title">Müşteri Değerlendirmeleri</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="reviews.css">
+    <link rel="stylesheet" href="welcome.css">
+</head>
+<body class="reviews-page">
+    <div class="container">
+        <header>
+            <h1 data-translate="customer_reviews_title">Müşteri Yorumları</h1>
+        </header>
+        <main>
+            <div id="review-form-container">
+                <h2 data-translate="share_your_review_title">Yorumunuzu Paylaşın</h2>
+                <form id="review-form">
+                    <div class="form-group">
+                        <label for="author-name" data-translate="your_name_label">Adınız:</label>
+                        <input type="text" id="author-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label data-translate="your_rating_label">Puanınız:</label>
+                        <div class="star-input">
+                            <span data-value="5">★</span>
+                            <span data-value="4">★</span>
+                            <span data-value="3">★</span>
+                            <span data-value="2">★</span>
+                            <span data-value="1">★</span>
+                        </div>
+                        <input type="hidden" id="star-rating-value" name="rating" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="review-comment" data-translate="your_comment_label">Yorumunuz:</label>
+                        <textarea id="review-comment" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" data-translate="submit_review_button">Yorumu Gönder</button>
+                </form>
+
+                <div id="example-reviews">
+                    <div class="example-review-item">
+                        <div class="star-rating">
+                            <span class="selected">★</span><span class="selected">★</span><span class="selected">★</span><span class="selected">★</span><span class="selected">★</span>
+                        </div>
+                        <p data-translate="example_review_1_text">"Harika bir deneyimdi! Uçuşlar zamanında ve personel çok ilgiliydi."</p>
+                        <p class="example-review-author" data-translate="example_review_1_author">- Ayşe Yılmaz</p>
+                    </div>
+                    <div class="example-review-item">
+                        <div class="star-rating">
+                            <span class="selected">★</span><span class="selected">★</span><span class="selected">★</span><span class="selected">★</span><span class="selected">★</span>
+                        </div>
+                        <p data-translate="example_review_2_text">"Rezervasyon süreci çok kolaydı ve web sitesi kullanıcı dostuydu. Kesinlikle tekrar kullanacağım."</p>
+                        <p data-translate="example_review_2_author">- Mehmet Demir</p>
+                    </div>
+                    <div class="example-review-item">
+                        <div class="star-rating">
+                            <span class="selected">★</span><span class="selected">★</span><span class="selected">★</span><span class="selected">★</span><span class="selected">★</span>
+                        </div>
+                        <p data-translate="example_review_3_text">"Müşteri hizmetleri mükemmeldi. Sorularıma hızlıca yanıt verdiler."</p>
+                        <p data-translate="example_review_3_author">- Zeynep Kaya</p>
+                    </div>
+                    <div class="example-review-item">
+                        <div class="star-rating">
+                            <span class="selected">★</span><span class="selected">★</span><span class="selected">★</span><span class="selected">★</span>
+                        </div>
+                        <p data-translate="example_review_4_text">"Uçuş ertelemesi yaşadık ama sorun hızla çözüldü. Genel olarak memnun kaldım."</p>
+                        <p class="example-review-author" data-translate="example_review_4_author">- Elif Can</p>
+                    </div>
+                    <div class="example-review-item">
+                        <div class="star-rating">
+                            <span class="selected">★</span><span class="selected">★</span><span class="selected">★</span><span class="selected">★</span><span class="selected">★</span>
+                        </div>
+                        <p data-translate="example_review_5_text">"Kabin ekibi çok güler yüzlü ve yardımseverdi. Keyifli bir yolculuk geçirdim."</p>
+                        <p class="example-review-author" data-translate="example_review_5_author">- Burak Yılmaz</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="reviews-container">
+                <!-- Yorumlar buraya dinamik olarak eklenecek -->
+            </div>
+        <div class="form-group">
+            <button id="back-btn" data-translate="back_button">Geri Dön</button>
+        </div>
+        </main>
+    </div>
+    <script src="reviews.js"></script>
+    <script src="translation.js"></script>
+</body>
+</html>

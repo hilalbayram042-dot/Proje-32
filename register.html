@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate="register_page_title">Üyelik Oluştur</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1 data-translate="register_heading">Üyelik Oluştur</h1>
+    </header>
+    <main>
+        <section class="membership-form">
+            <form id="registerForm">
+                <h2 data-translate="register_heading">Üye Ol</h2>
+                <div class="form-group">
+                    <label for="regFirstName" data-translate="first_name_label">Ad:</label>
+                    <input type="text" id="regFirstName" name="regFirstName" required>
+                </div>
+                <div class="form-group">
+                    <label for="regLastName" data-translate="last_name_label">Soyad:</label>
+                    <input type="text" id="regLastName" name="regLastName" required>
+                </div>
+                <div class="form-group">
+                    <label for="regTc" data-translate="tc_number_label">TC Kimlik No:</label>
+                    <input type="text" id="regTc" name="regTc" pattern="[0-9]{11}" title="Please enter a valid 11-digit TC Kimlik No" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPhone" data-translate="phone_number_label">Telefon Numarası:</label>
+                    <input type="tel" id="regPhone" name="regPhone" pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number" required>
+                </div>
+                <div class="form-group">
+                    <label for="regEmail" data-translate="email_label">E-posta:</label>
+                    <input type="email" id="regEmail" name="regEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPassword" data-translate="password_label">Şifre:</label>
+                    <input type="password" id="regPassword" name="regPassword" required>
+                </div>
+                <button type="submit" data-translate="register_button">Üye Ol</button>
+            </form>
+            <div class="login-prompt">
+                <p data-translate="have_account_prompt">Zaten hesabın var mı?</p>
+                <button onclick="location.href='membership.html'" class="login-now-btn" data-translate="login_now_link">Şimdi Giriş Yap!</button>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 Flight Reservation System</p>
+    </footer>
+    <script src="translation.js"></script>
+    <script src="register.js"></script>
+</body>
+</html>
