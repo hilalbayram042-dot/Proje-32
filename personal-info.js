@@ -137,41 +137,79 @@ document.addEventListener('DOMContentLoaded', () => {
         let allFormsValid = true;
 
         for (let i = 1; i <= passengerCount; i++) {
+            const tcInput = document.getElementById(`tc-${i}`);
             const nameInput = document.getElementById(`name-${i}`);
             const surnameInput = document.getElementById(`surname-${i}`);
             const emailInput = document.getElementById(`email-${i}`);
+            const phoneInput = document.getElementById(`phone-${i}`);
 
+            const tc = tcInput.value.trim();
             const name = nameInput.value.trim();
             const surname = surnameInput.value.trim();
             const email = emailInput.value.trim();
+            const phone = phoneInput.value.replace(/\D/g, ''); // Remove non-digit characters
+
             
-            if (!name || !surname || !email) { // Also check for email
+            // Check if TC is exactly 11 digits
+            if (tc.length !== 11 || !/^\d{11}$/.test(tc)) {
                 allFormsValid = false;
-                // Highlight empty fields
+                tcInput.style.borderColor = 'red';
+            } else {
+                tcInput.style.borderColor = '';
+            }
+
+            // Check if phone is exactly 10 digits
+            if (phone.length !== 10) {
+                allFormsValid = false;
+                phoneInput.style.borderColor = 'red';
+            } else {
+                phoneInput.style.borderColor = '';
+            }
+
+            if (!name || !surname || !email) { 
+                allFormsValid = false;
                 if (!name) nameInput.style.borderColor = 'red'; else nameInput.style.borderColor = '';
                 if (!surname) surnameInput.style.borderColor = 'red'; else surnameInput.style.borderColor = '';
                 if (!email) emailInput.style.borderColor = 'red'; else emailInput.style.borderColor = '';
-
             } else {
-                 nameInput.style.borderColor = '';
-                 surnameInput.style.borderColor = '';
-                 emailInput.style.borderColor = '';
+                 if(tc.length === 11) nameInput.style.borderColor = '';
+                 if(tc.length === 11) surnameInput.style.borderColor = '';
+                 if(tc.length === 11) emailInput.style.borderColor = '';
             }
 
             const passengerInfo = {
-                tc: document.getElementById(`tc-${i}`).value,
+                tc: tc,
                 name: name,
                 surname: surname,
                 gender: document.getElementById(`gender-${i}`).value,
                 nationality: document.getElementById(`nationality-${i}`).value,
-                phone: document.getElementById(`phone-${i}`).value,
+                phone: phone,
                 email: email,
             };
             passengersData.push(passengerInfo);
         }
 
         if (!allFormsValid) {
-            alert('Lütfen tüm yolcular için zorunlu alanları (Ad, Soyad, E-posta) doldurun.');
+            let tcError = false;
+            let phoneError = false;
+            for (let i = 1; i <= passengerCount; i++) {
+                const tcInput = document.getElementById(`tc-${i}`);
+                if (tcInput.style.borderColor === 'red') {
+                    tcError = true;
+                }
+                const phoneInput = document.getElementById(`phone-${i}`);
+                if (phoneInput.style.borderColor === 'red') {
+                    phoneError = true;
+                }
+            }
+
+            if (tcError) {
+                alert('Lütfen geçerli bir TC Kimlik Numarası giriniz (11 haneli ve sadece rakamlardan oluşmalıdır).');
+            } else if (phoneError) {
+                alert('Lütfen geçerli bir telefon numarası giriniz (10 haneli ve sadece rakamlardan oluşmalıdır).');
+            } else {
+                alert('Lütfen tüm yolcular için zorunlu alanları (Ad, Soyad, E-posta) doldurun.');
+            }
             return;
         }
 
