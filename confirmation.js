@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', () => {
     const confirmationMessage = document.getElementById('confirmation-message');
     const homeBtn = document.getElementById('home-btn');

@@ -294,6 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (selectedFlight && selectedSeats.length === totalPassengers) {
             const totalCost = selectedFlight.basePrice * selectedSeats.length;
             const bookingDetails = {
+                ...searchCriteria,
                 ...selectedFlight,
                 selectedSeats: selectedSeats,
                 finalPrice: totalCost,
