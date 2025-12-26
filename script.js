@@ -58,6 +58,13 @@ document.addEventListener('DOMContentLoaded', () => {
             showNotification('Gidiş tarihi seçmelisiniz.');
             return;
         }
+
+        const today = new Date().toISOString().split('T')[0];
+        if (departureDate < today) {
+            showNotification('Gidiş tarihi geçmiş bir tarih olamaz.');
+            return;
+        }
+        
         if (isRoundTrip && !returnDateValue) {
             showNotification('Gidiş-Dönüş seçeneği için dönüş tarihi zorunludur.');
             return;
@@ -84,4 +91,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initial setup
     toggleReturnDate();
+
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('departure-date').min = today;
+    document.getElementById('return-date').min = today;
 });
