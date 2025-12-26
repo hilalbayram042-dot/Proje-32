@@ -51,23 +51,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderPurchasedTickets() {
         const purchasedTickets = JSON.parse(localStorage.getItem('purchasedTickets')) || [];
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
 
         if (purchasedTickets.length > 0) {
             ticketListDiv.innerHTML = ''; // Clear "No tickets found" message
 
             purchasedTickets.forEach((bookingDetails, index) => {
+                const ticketDate = new Date(bookingDetails.departureDate);
+                const isExpired = ticketDate < today;
+
                 const ticketItem = document.createElement('div');
                 ticketItem.classList.add('ticket-item');
+                if (isExpired) {
+                    ticketItem.classList.add('expired-ticket');
+                }
+
+                let actionHtml = '';
+                if (!isExpired) {
+                    actionHtml = `<button class="cancel-ticket-btn" data-pnr="${bookingDetails.pnr}">Bileti İptal Et</button>`;
+                } else {
+                    actionHtml = `<p class="expired-ticket-message">Bu biletin tarihi geçmiştir.</p>`;
+                }
+
                 ticketItem.innerHTML = `
                     <h3>Uçuş Numarası: ${bookingDetails.flightNumber} (PNR: ${bookingDetails.pnr})</h3>
                     <p>Havayolu: ${bookingDetails.airline}</p>
                     <p>Kalkış: ${bookingDetails.departureTime} - Varış: ${bookingDetails.arrivalTime}</p>
+                    <p>Kalkış Tarihi: ${bookingDetails.departureDate}</p>
                     <p>Sınıf: ${bookingDetails.seatClass}</p>
                     <p>Koltuklar: ${bookingDetails.selectedSeats.join(', ')}</p>
                     <p>Toplam Tutar: ${bookingDetails.finalPrice.toFixed(2)} TL</p>
                     <h4>Yolcu Bilgileri:</h4>
                     ${bookingDetails.passengers.map(p => `<p>${p.name} ${p.surname} (TC: ${p.tc || 'N/A'})</p>`).join('')}
-                    <button class="cancel-ticket-btn" data-pnr="${bookingDetails.pnr}">Bileti İptal Et</button>
+                    ${actionHtml}
                 `;
                 ticketListDiv.appendChild(ticketItem);
             });

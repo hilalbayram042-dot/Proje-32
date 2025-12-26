@@ -723,3 +723,16 @@ button[type="submit"]:hover {
 #logoutButton:hover {
     background-color: #002244; /* Even Darker Night Blue */
 }
+
+/* Styles for expired tickets */
+.expired-ticket {
+    opacity: 0.6;
+    background-color: #343a40; /* Darker grey */
+}
+
+.expired-ticket-message {
+    color: #ffc107; /* Amber */
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+}
