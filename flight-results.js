@@ -201,9 +201,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (seatClass === 'business') {
                         businessClassBtn.classList.add('active');
                         economyClassBtn.classList.remove('active');
+                        businessClassBtn.disabled = false;
+                        economyClassBtn.disabled = true;
                     } else {
                         economyClassBtn.classList.add('active');
                         businessClassBtn.classList.remove('active');
+                        businessClassBtn.disabled = true;
+                        economyClassBtn.disabled = false;
                     }
                     renderSeatMap(seatClass); 
                 });
@@ -281,19 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Event Listeners ---
 
-    businessClassBtn.addEventListener('click', () => {
-        businessClassBtn.classList.add('active');
-        economyClassBtn.classList.remove('active');
-        selectedSeats = [];
-        renderSeatMap('business');
-    });
-
-    economyClassBtn.addEventListener('click', () => {
-        economyClassBtn.classList.add('active');
-        businessClassBtn.classList.remove('active');
-        selectedSeats = [];
-        renderSeatMap('economy');
-    });
+        
 
     confirmSeatSelectionBtn.addEventListener('click', () => {
         const searchCriteria = JSON.parse(sessionStorage.getItem('flightSearchCriteria'));
@@ -318,13 +310,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     sortBy.addEventListener('change', renderFlights);
 
+    function resetSeatModalButtons() {
+        businessClassBtn.disabled = false;
+        economyClassBtn.disabled = false;
+        businessClassBtn.classList.add('active');
+        economyClassBtn.classList.remove('active');
+    }
+
     closeButton.addEventListener('click', () => {
         seatModal.classList.remove('show');
+        resetSeatModalButtons();
     });
 
     window.addEventListener('click', (event) => {
         if (event.target === seatModal) {
             seatModal.classList.remove('show');
+            resetSeatModalButtons();
         }
     });
 
