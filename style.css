@@ -706,3 +706,20 @@ button[type="submit"]:hover {
 .cancel-ticket-btn:hover {
     background-color: #c82333; /* Darker Red */
 }
+
+/* Style for logout button */
+#logoutButton {
+    display: block;
+    margin: 20px auto;
+    width: 50%;
+    max-width: 200px;
+    background-color: #003366; /* Dark Blue */
+    color: white;
+    padding: 12px;
+    font-size: 16px;
+    text-align: center;
+}
+
+#logoutButton:hover {
+    background-color: #002244; /* Even Darker Night Blue */
+}

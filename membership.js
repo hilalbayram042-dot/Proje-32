@@ -96,6 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
             registerFormSection.style.display = 'none';
             loggedInSection.style.display = 'block';
             myTicketsSection.style.display = 'block';
+            logoutButton.style.display = 'block';
             welcomeMessage.textContent = `Hoş Geldiniz, ${loggedInUserEmail || 'Üye'}!`;
             renderPurchasedTickets(); // Render tickets only when logged in
         } else {
@@ -103,6 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
             registerFormSection.style.display = 'none'; // Default to login form
             loggedInSection.style.display = 'none';
             myTicketsSection.style.display = 'none';
+            logoutButton.style.display = 'none';
         }
     }
 
