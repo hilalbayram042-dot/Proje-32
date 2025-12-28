@@ -82,48 +82,113 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function generatePassengerForms() {
         passengerFormsContainer.innerHTML = ''; // Clear container
-        // The title should reflect that forms are for the selected number of passengers (seats)
-        const passengerCount = bookingDetails.selectedSeats.length;
+
+        const adults = parseInt(bookingDetails.adults, 10) || 0;
+        const children = parseInt(bookingDetails.children, 10) || 0;
+        const totalPassengers = adults + children;
+
+        // Ensure the number of selected seats matches the number of passengers
+        if (bookingDetails.selectedSeats.length !== totalPassengers) {
+            alert('Yolcu sayısı ile seçilen koltuk sayısı eşleşmiyor. Lütfen uçuş seçimine geri dönün.');
+            window.location.href = 'flights.html';
+            return;
+        }
+        
         const formTitle = document.createElement('h2');
-        formTitle.textContent = `${passengerCount} Yolcu İçin Bilgileri Giriniz`;
+        formTitle.textContent = `${totalPassengers} Yolcu İçin Bilgileri Giriniz`;
         passengerFormsContainer.appendChild(formTitle);
 
+        let seatIndex = 0;
 
-        for (let i = 1; i <= passengerCount; i++) {
+        // Generate forms for adults
+        for (let i = 1; i <= adults; i++) {
+            const seat = bookingDetails.selectedSeats[seatIndex++];
             const formHtml = `
-                <div class="passenger-form" id="passenger-form-${i}">
-                    <h3>${i}. Yolcu Bilgileri (Koltuk: ${bookingDetails.selectedSeats[i - 1]})</h3>
+                <div class="passenger-form" id="passenger-form-adult-${i}">
+                    <h3>${i}. Yetişkin Yolcu Bilgileri (Koltuk: ${seat})</h3>
                     <div class="form-group">
-                        <label for="tc-${i}">TC Kimlik Numarası</label>
-                        <input type="text" id="tc-${i}" name="tc" pattern="[0-9]{11}" title="11 haneli TC Kimlik Numaranızı giriniz.">
+                        <label for="tc-adult-${i}">TC Kimlik Numarası</label>
+                        <input type="text" id="tc-adult-${i}" name="tc" pattern="[0-9]{11}" title="11 haneli TC Kimlik Numaranızı giriniz.">
                     </div>
                     <div class="form-group">
-                        <label for="name-${i}">Ad</label>
-                        <input type="text" id="name-${i}" name="name" required>
+                        <label for="name-adult-${i}">Ad</label>
+                        <input type="text" id="name-adult-${i}" name="name" required>
                     </div>
                     <div class="form-group">
-                        <label for="surname-${i}">Soyad</label>
-                        <input type="text" id="surname-${i}" name="surname" required>
+                        <label for="surname-adult-${i}">Soyad</label>
+                        <input type="text" id="surname-adult-${i}" name="surname" required>
                     </div>
                     <div class="form-group">
-                        <label for="gender-${i}">Cinsiyet</label>
-                        <select id="gender-${i}" name="gender">
+                        <label for="gender-adult-${i}">Cinsiyet</label>
+                        <select id="gender-adult-${i}" name="gender">
                             <option value="kadin">Kadın</option>
                             <option value="erkek">Erkek</option>
                             <option value="belirtmek-istemiyorum">Belirtmek İstemiyorum</option>
                         </select>
                     </div>
-                     <div class="form-group">
-                        <label for="nationality-${i}">Uyruk</label>
-                        <input type="text" id="nationality-${i}" name="nationality" value="Türkiye (TC)" required>
+                    <div class="form-group">
+                        <label for="nationality-adult-${i}">Uyruk</label>
+                        <input type="text" id="nationality-adult-${i}" name="nationality" value="Türkiye (TC)" required>
                     </div>
                     <div class="form-group">
-                        <label for="phone-${i}">Telefon Numarası</label>
-                        <input type="tel" id="phone-${i}" name="phone" placeholder="555-555-5555" required>
+                        <label for="phone-adult-${i}">Telefon Numarası</label>
+                        <input type="tel" id="phone-adult-${i}" name="phone" placeholder="555-555-5555" required>
                     </div>
                     <div class="form-group">
-                        <label for="email-${i}">E-posta</label>
-                        <input type="email" id="email-${i}" name="email" required>
+                        <label for="email-adult-${i}">E-posta</label>
+                        <input type="email" id="email-adult-${i}" name="email" required>
+                    </div>
+                </div>
+            `;
+            passengerFormsContainer.innerHTML += formHtml;
+        }
+
+        // Generate forms for children
+        for (let i = 1; i <= children; i++) {
+            const seat = bookingDetails.selectedSeats[seatIndex++];
+            const formHtml = `
+                <div class="passenger-form" id="passenger-form-child-${i}" style="border-left: 4px solid #00bfff;">
+                    <h3>${i}. Çocuk Yolcu Bilgileri (Koltuk: ${seat})</h3>
+                    <div class="form-group">
+                        <label for="tc-child-${i}">TC Kimlik Numarası</label>
+                        <input type="text" id="tc-child-${i}" name="tc" pattern="[0-9]{11}" title="11 haneli TC Kimlik Numaranızı giriniz.">
+                    </div>
+                    <div class="form-group">
+                        <label for="name-child-${i}">Ad</label>
+                        <input type="text" id="name-child-${i}" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="surname-child-${i}">Soyad</label>
+                        <input type="text" id="surname-child-${i}" name="surname" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender-child-${i}">Cinsiyet</label>
+                        <select id="gender-child-${i}" name="gender">
+                            <option value="kadin">Kız</option>
+                            <option value="erkek">Erkek</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="nationality-child-${i}">Uyruk</label>
+                        <input type="text" id="nationality-child-${i}" name="nationality" value="Türkiye (TC)" required>
+                    </div>
+                    
+                    <h4 style="margin-top: 20px; border-top: 1px solid #ddd; padding-top: 15px;">Veli Bilgileri</h4>
+                    <div class="form-group">
+                        <label for="parent-name-${i}">Veli Adı</label>
+                        <input type="text" id="parent-name-${i}" name="parent-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="parent-surname-${i}">Veli Soyadı</label>
+                        <input type="text" id="parent-surname-${i}" name="parent-surname" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="parent-email-${i}">Veli E-postası</label>
+                        <input type="email" id="parent-email-${i}" name="parent-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="parent-phone-${i}">Veli Cep Telefonu</label>
+                        <input type="tel" id="parent-phone-${i}" name="parent-phone" placeholder="555-555-5555" required>
                     </div>
                 </div>
             `;
@@ -133,83 +198,100 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function handleConfirmBooking() {
         const passengersData = [];
-        const passengerCount = bookingDetails.selectedSeats.length;
+        const adults = parseInt(bookingDetails.adults, 10) || 0;
+        const children = parseInt(bookingDetails.children, 10) || 0;
         let allFormsValid = true;
 
-        for (let i = 1; i <= passengerCount; i++) {
-            const tcInput = document.getElementById(`tc-${i}`);
-            const nameInput = document.getElementById(`name-${i}`);
-            const surnameInput = document.getElementById(`surname-${i}`);
-            const emailInput = document.getElementById(`email-${i}`);
-            const phoneInput = document.getElementById(`phone-${i}`);
+        // Process adults
+        for (let i = 1; i <= adults; i++) {
+            const tcInput = document.getElementById(`tc-adult-${i}`);
+            const nameInput = document.getElementById(`name-adult-${i}`);
+            const surnameInput = document.getElementById(`surname-adult-${i}`);
+            const emailInput = document.getElementById(`email-adult-${i}`);
+            const phoneInput = document.getElementById(`phone-adult-${i}`);
 
-            const tc = tcInput.value.trim();
-            const name = nameInput.value.trim();
-            const surname = surnameInput.value.trim();
-            const email = emailInput.value.trim();
-            const phone = phoneInput.value.replace(/\D/g, ''); // Remove non-digit characters
+            const tc = tcInput ? tcInput.value.trim() : '';
+            const name = nameInput ? nameInput.value.trim() : '';
+            const surname = surnameInput ? surnameInput.value.trim() : '';
+            const email = emailInput ? emailInput.value.trim() : '';
+            const phone = phoneInput ? phoneInput.value.replace(/\D/g, '') : '';
 
-            
-            // Check if TC is exactly 11 digits
-            if (tc.length !== 11 || !/^\d{11}$/.test(tc)) {
+            if ((tc.length !== 11 || !/^\d{11}$/.test(tc)) || phone.length !== 10 || !name || !surname || !email) {
                 allFormsValid = false;
-                tcInput.style.borderColor = 'red';
+                if (tcInput) tcInput.style.borderColor = (tc.length !== 11 || !/^\d{11}$/.test(tc)) ? 'red' : '';
+                if (phoneInput) phoneInput.style.borderColor = phone.length !== 10 ? 'red' : '';
+                if (nameInput) nameInput.style.borderColor = !name ? 'red' : '';
+                if (surnameInput) surnameInput.style.borderColor = !surname ? 'red' : '';
+                if (emailInput) emailInput.style.borderColor = !email ? 'red' : '';
             } else {
-                tcInput.style.borderColor = '';
+                if (tcInput) tcInput.style.borderColor = '';
+                if (phoneInput) phoneInput.style.borderColor = '';
+                if (nameInput) nameInput.style.borderColor = '';
+                if (surnameInput) surnameInput.style.borderColor = '';
+                if (emailInput) emailInput.style.borderColor = '';
             }
 
-            // Check if phone is exactly 10 digits
-            if (phone.length !== 10) {
+            passengersData.push({
+                tc, name, surname, email, phone,
+                gender: document.getElementById(`gender-adult-${i}`).value,
+                nationality: document.getElementById(`nationality-adult-${i}`).value,
+                isChild: false
+            });
+        }
+
+        // Process children
+        for (let i = 1; i <= children; i++) {
+            const tcInput = document.getElementById(`tc-child-${i}`);
+            const nameInput = document.getElementById(`name-child-${i}`);
+            const surnameInput = document.getElementById(`surname-child-${i}`);
+            const parentNameInput = document.getElementById(`parent-name-${i}`);
+            const parentSurnameInput = document.getElementById(`parent-surname-${i}`);
+            const parentEmailInput = document.getElementById(`parent-email-${i}`);
+            const parentPhoneInput = document.getElementById(`parent-phone-${i}`);
+
+            const tc = tcInput ? tcInput.value.trim() : '';
+            const name = nameInput ? nameInput.value.trim() : '';
+            const surname = surnameInput ? surnameInput.value.trim() : '';
+            const parentName = parentNameInput ? parentNameInput.value.trim() : '';
+            const parentSurname = parentSurnameInput ? parentSurnameInput.value.trim() : '';
+            const parentEmail = parentEmailInput ? parentEmailInput.value.trim() : '';
+            const parentPhone = parentPhoneInput ? parentPhoneInput.value.replace(/\D/g, '') : '';
+
+            if (!name || !surname || !parentName || !parentSurname || !parentEmail || parentPhone.length !== 10 || (tc && (tc.length !== 11 || !/^\d{11}$/.test(tc)))) {
                 allFormsValid = false;
-                phoneInput.style.borderColor = 'red';
+                if (nameInput) nameInput.style.borderColor = !name ? 'red' : '';
+                if (surnameInput) surnameInput.style.borderColor = !surname ? 'red' : '';
+                if (tcInput) tcInput.style.borderColor = (tc && (tc.length !== 11 || !/^\d{11}$/.test(tc))) ? 'red' : '';
+                if (parentNameInput) parentNameInput.style.borderColor = !parentName ? 'red' : '';
+                if (parentSurnameInput) parentSurnameInput.style.borderColor = !parentSurname ? 'red' : '';
+                if (parentEmailInput) parentEmailInput.style.borderColor = !parentEmail ? 'red' : '';
+                if (parentPhoneInput) parentPhoneInput.style.borderColor = parentPhone.length !== 10 ? 'red' : '';
             } else {
-                phoneInput.style.borderColor = '';
+                if (nameInput) nameInput.style.borderColor = '';
+                if (surnameInput) surnameInput.style.borderColor = '';
+                if (tcInput) tcInput.style.borderColor = '';
+                if (parentNameInput) parentNameInput.style.borderColor = '';
+                if (parentSurnameInput) parentSurnameInput.style.borderColor = '';
+                if (parentEmailInput) parentEmailInput.style.borderColor = '';
+                if (parentPhoneInput) parentPhoneInput.style.borderColor = '';
             }
 
-            if (!name || !surname || !email) { 
-                allFormsValid = false;
-                if (!name) nameInput.style.borderColor = 'red'; else nameInput.style.borderColor = '';
-                if (!surname) surnameInput.style.borderColor = 'red'; else surnameInput.style.borderColor = '';
-                if (!email) emailInput.style.borderColor = 'red'; else emailInput.style.borderColor = '';
-            } else {
-                 if(tc.length === 11) nameInput.style.borderColor = '';
-                 if(tc.length === 11) surnameInput.style.borderColor = '';
-                 if(tc.length === 11) emailInput.style.borderColor = '';
-            }
-
-            const passengerInfo = {
-                tc: tc,
-                name: name,
-                surname: surname,
-                gender: document.getElementById(`gender-${i}`).value,
-                nationality: document.getElementById(`nationality-${i}`).value,
-                phone: phone,
-                email: email,
-            };
-            passengersData.push(passengerInfo);
+            passengersData.push({
+                tc, name, surname,
+                gender: document.getElementById(`gender-child-${i}`).value,
+                nationality: document.getElementById(`nationality-child-${i}`).value,
+                isChild: true,
+                parentInfo: {
+                    name: parentName,
+                    surname: parentSurname,
+                    email: parentEmail,
+                    phone: parentPhone
+                }
+            });
         }
 
         if (!allFormsValid) {
-            let tcError = false;
-            let phoneError = false;
-            for (let i = 1; i <= passengerCount; i++) {
-                const tcInput = document.getElementById(`tc-${i}`);
-                if (tcInput.style.borderColor === 'red') {
-                    tcError = true;
-                }
-                const phoneInput = document.getElementById(`phone-${i}`);
-                if (phoneInput.style.borderColor === 'red') {
-                    phoneError = true;
-                }
-            }
-
-            if (tcError) {
-                alert('Lütfen geçerli bir TC Kimlik Numarası giriniz (11 haneli ve sadece rakamlardan oluşmalıdır).');
-            } else if (phoneError) {
-                alert('Lütfen geçerli bir telefon numarası giriniz (10 haneli ve sadece rakamlardan oluşmalıdır).');
-            } else {
-                alert('Lütfen tüm yolcular için zorunlu alanları (Ad, Soyad, E-posta) doldurun.');
-            }
+            alert('Lütfen tüm yolcular için zorunlu alanları doğru bir şekilde doldurun.');
             return;
         }
 

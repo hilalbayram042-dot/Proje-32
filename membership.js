@@ -50,14 +50,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Functions ---
 
     function renderPurchasedTickets() {
-        const purchasedTickets = JSON.parse(localStorage.getItem('purchasedTickets')) || [];
+        const allTickets = JSON.parse(localStorage.getItem('purchasedTickets')) || [];
+        const loggedInUserEmail = sessionStorage.getItem('loggedInUserEmail');
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
-        if (purchasedTickets.length > 0) {
+        // Filter tickets for the logged-in user
+        const userTickets = allTickets.filter(ticket => {
+            return ticket.purchaserEmail === loggedInUserEmail || ticket.associatedUserEmail === loggedInUserEmail;
+        });
+
+        if (userTickets.length > 0) {
             ticketListDiv.innerHTML = ''; // Clear "No tickets found" message
 
-            purchasedTickets.forEach((bookingDetails, index) => {
+            userTickets.forEach((bookingDetails) => {
                 const ticketDate = new Date(bookingDetails.departureDate);
                 const isExpired = ticketDate < today;
 
@@ -73,8 +79,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     actionHtml = `<p class="expired-ticket-message">Bu biletin tarihi geçmiştir.</p>`;
                 }
+                
+                let specialNote = '';
+                if (bookingDetails.isChildTicket) {
+                    const childPassenger = bookingDetails.passengers.find(p => p.isChild);
+                    if (childPassenger) {
+                        specialNote = `<p style="color: #00bfff; font-weight: bold;">Not: Bu bilet, velisi olduğunuz "${childPassenger.name} ${childPassenger.surname}" adlı çocuk için düzenlenmiştir.</p>`;
+                    }
+                }
+
 
                 ticketItem.innerHTML = `
+                    ${specialNote}
                     <h3>Uçuş Numarası: ${bookingDetails.flightNumber} (PNR: ${bookingDetails.pnr})</h3>
                     <p>Havayolu: ${bookingDetails.airline}</p>
                     <p>Kalkış: ${bookingDetails.departureTime} - Varış: ${bookingDetails.arrivalTime}</p>
@@ -83,7 +99,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p>Koltuklar: ${bookingDetails.selectedSeats.join(', ')}</p>
                     <p>Toplam Tutar: ${bookingDetails.finalPrice.toFixed(2)} TL</p>
                     <h4>Yolcu Bilgileri:</h4>
-                    ${bookingDetails.passengers.map(p => `<p>${p.name} ${p.surname} (TC: ${p.tc || 'N/A'})</p>`).join('')}
+                    ${bookingDetails.passengers.map(p => {
+                        let passengerLabel = p.isChild ? '(Çocuk)' : '(Yetişkin)';
+                        return `<p>${p.name} ${p.surname} ${passengerLabel} (TC: ${p.tc || 'N/A'})</p>`;
+                    }).join('')}
                     ${actionHtml}
                 `;
                 ticketListDiv.appendChild(ticketItem);
