@@ -174,5 +174,6 @@
     "guardian_last_name": "Veli Soyadı",
     "guardian_email": "Veli E-postası",
     "guardian_mobile_phone": "Veli Cep Telefonu",
-    "fill_required_fields": "Lütfen tüm yolcular için zorunlu alanları doğru bir şekilde doldurun."
+    "fill_required_fields": "Lütfen tüm yolcular için zorunlu alanları doğru bir şekilde doldurun.",
+    "select_city": "Şehir Seçin"
 }
