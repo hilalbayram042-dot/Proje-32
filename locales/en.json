@@ -68,5 +68,12 @@
     "welcome_message": "Welcome, [User Name]!",
     "my_tickets_heading": "My Purchased Tickets",
     "no_purchased_tickets": "You have not purchased any tickets yet.",
-    "logout_button": "Logout"
+    "logout_button": "Logout",
+    "payment_info_title": "Payment Information",
+    "credit_card_info_title": "Credit Card Information",
+    "card_number_label": "Card Number",
+    "card_name_label": "Name on Card",
+    "expiry_date_label": "Expiry Date",
+    "cvc_label": "CVC",
+    "complete_payment_button": "Complete Payment"
 }

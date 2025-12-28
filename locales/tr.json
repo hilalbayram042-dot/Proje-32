@@ -68,5 +68,12 @@
     "welcome_message": "Hoş Geldiniz, [Kullanıcı Adı]!",
     "my_tickets_heading": "Satın Aldığım Biletler",
     "no_purchased_tickets": "Henüz satın alınmış biletiniz bulunmamaktadır.",
-    "logout_button": "Çıkış Yap"
+    "logout_button": "Çıkış Yap",
+    "payment_info_title": "Ödeme Bilgileri",
+    "credit_card_info_title": "Kredi Kartı Bilgileri",
+    "card_number_label": "Kart Numarası",
+    "card_name_label": "Kart Üzerindeki İsim",
+    "expiry_date_label": "Son Kullanma Tarihi",
+    "cvc_label": "CVC",
+    "complete_payment_button": "Ödemeyi Tamamla"
 }
