@@ -1,48 +1,46 @@
-const translations = {};
-
 async function loadTranslations(lang) {
     try {
-        const response = await fetch(`locales/${lang}.json`);
+        const response = await fetch(`locales/${lang}.json?v=${new Date().getTime()}`);
         if (!response.ok) {
             throw new Error(`Could not load ${lang}.json`);
         }
-        const data = await response.json();
-        translations[lang] = data;
-        return data;
+        return await response.json();
     } catch (error) {
         console.error('Error loading translations:', error);
         return {};
     }
 }
 
-function translatePage(lang) {
-    const targetLang = lang || localStorage.getItem('language') || 'tr';
+function translatePage(translations) {
     const translatableElements = document.querySelectorAll('[data-translate]');
     translatableElements.forEach(element => {
         const key = element.dataset.translate;
-        if (translations[targetLang] && translations[targetLang][key]) {
-            element.textContent = translations[targetLang][key];
+        if (translations && translations[key]) {
+            element.textContent = translations[key];
         }
     });
 }
 
-function setLanguage(lang) {
+async function setLanguage(lang) {
     localStorage.setItem('language', lang);
-    loadTranslations(lang).then(() => {
-        translatePage(lang);
-    });
+    const translations = await loadTranslations(lang);
+    translatePage(translations);
+    document.documentElement.lang = lang; 
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     const savedLang = localStorage.getItem('language') || 'tr';
     setLanguage(savedLang);
 
-    const langLinks = document.querySelectorAll('.language-dropdown a');
-    langLinks.forEach(link => {
-        link.addEventListener('click', (event) => {
+    
+    document.body.addEventListener('click', (event) => {
+        const langLink = event.target.closest('[data-lang]');
+        if (langLink) {
             event.preventDefault();
-            const lang = link.dataset.lang;
-            setLanguage(lang);
-        });
+            const lang = langLink.dataset.lang;
+            if (lang !== localStorage.getItem('language')) {
+                setLanguage(lang);
+            }
+        }
     });
 });
