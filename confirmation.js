@@ -1,4 +1,5 @@
-document.addEventListener('DOMContentLoaded', () => {
+// This function will render the dynamic content of the page using the provided translations
+function renderConfirmationPage(translations) {
     const confirmationMessage = document.getElementById('confirmation-message');
     const homeBtn = document.getElementById('home-btn');
 
@@ -12,100 +13,98 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // Get the email of the first passenger
     const recipientEmail = bookingDetails.passengers && bookingDetails.passengers.length > 0 
         ? bookingDetails.passengers[0].email 
-        : 'belirtilen e-posta adresine';
+        : translations.recipient_email_placeholder || 'the specified email address';
 
     const pnrLine = bookingDetails.pnr
-        ? `<p>Biletiniz başarıyla oluşturulmuştur. PNR kodunuz: <strong>${bookingDetails.pnr}</strong></p>`
+        ? `<p>${translations.ticket_creation_success || 'Your ticket has been successfully created. Your PNR code is: '}<strong>${bookingDetails.pnr}</strong></p>`
         : '';
 
     const passengerNames = bookingDetails.passengers.map(p => `${p.name} ${p.surname}`).join(', ');
 
-    // Display the confirmation message
-    confirmationMessage.innerHTML = `
-        <p>Ödemeniz başarıyla tamamlanmıştır.</p>
-        ${pnrLine}
-        
-        <div class="ticket-summary" style="border: 1px solid #ccc; padding: 15px; margin-top: 20px; border-radius: 5px;">
-            <h4 style="margin-top: 0;">Bilet Özeti</h4>
-            <p><strong>Nereden:</strong> ${bookingDetails.from}</p>
-            <p><strong>Nereye:</strong> ${bookingDetails.to}</p>
-            <p><strong>Gidiş Tarihi:</strong> ${bookingDetails.departureDate}</p>
-            ${bookingDetails.isRoundTrip ? `<p><strong>Dönüş Tarihi:</strong> ${bookingDetails.returnDate}</p>` : ''}
-            <p><strong>Yolcular:</strong> ${passengerNames}</p>
-        </div>
-
-        <p style="margin-top: 20px;">Bilet bilgilerinizin tüm detayları <strong>${recipientEmail}</strong> adresine e-posta olarak gönderilmiştir.</p>
-        <p>İyi uçuşlar dileriz!</p>
-    `;
-
     // --- Persist the purchased ticket to localStorage ---
+    // This logic doesn't need translation, but we run it here to make sure the ticket is saved.
     let purchasedTickets = JSON.parse(localStorage.getItem('purchasedTickets')) || [];
     const loggedInUserEmail = sessionStorage.getItem('loggedInUserEmail');
 
-    // Associate the main ticket with the logged-in user
-    if (loggedInUserEmail) {
-        bookingDetails.purchaserEmail = loggedInUserEmail;
-    }
-    purchasedTickets.push(bookingDetails);
+    // Check if this PNR has already been added to avoid duplicates on language switch
+    const ticketAlreadyExists = purchasedTickets.some(ticket => ticket.pnr === bookingDetails.pnr && ticket.purchaserEmail === loggedInUserEmail);
 
-    // Create separate ticket entries for parents of child passengers
-    bookingDetails.passengers.forEach(passenger => {
-        if (passenger.isChild && passenger.parentInfo && passenger.parentInfo.email) {
-            // Clone the booking details to create a separate entry for the parent
-            const parentTicket = JSON.parse(JSON.stringify(bookingDetails));
-            parentTicket.associatedUserEmail = passenger.parentInfo.email; // Link to parent's email
-            parentTicket.isChildTicket = true; // Mark this as a child's ticket view for the parent
-            purchasedTickets.push(parentTicket);
-            
-            // Also send a (simulated) email to the parent
-            console.log(`(Simulated) Child's ticket details sent to parent: ${passenger.parentInfo.email}`);
+    if (!ticketAlreadyExists) {
+        if (loggedInUserEmail) {
+            bookingDetails.purchaserEmail = loggedInUserEmail;
         }
-    });
+        purchasedTickets.push(bookingDetails);
 
-    localStorage.setItem('purchasedTickets', JSON.stringify(purchasedTickets));
+        bookingDetails.passengers.forEach(passenger => {
+            if (passenger.isChild && passenger.parentInfo && passenger.parentInfo.email) {
+                const parentTicket = JSON.parse(JSON.stringify(bookingDetails));
+                parentTicket.associatedUserEmail = passenger.parentInfo.email;
+                parentTicket.isChildTicket = true;
+                purchasedTickets.push(parentTicket);
+                console.log(`(Simulated) Child's ticket details sent to parent: ${passenger.parentInfo.email}`);
+            }
+        });
+        localStorage.setItem('purchasedTickets', JSON.stringify(purchasedTickets));
+    }
     // --- End persistence logic ---
 
-    // Update confirmation message to reflect where emails were sent
+    // Determine email recipients for the confirmation message
     const primaryRecipient = loggedInUserEmail || recipientEmail;
     const parentEmails = bookingDetails.passengers
         .filter(p => p.isChild && p.parentInfo && p.parentInfo.email)
         .map(p => p.parentInfo.email);
     
-    const uniqueParentEmails = [...new Set(parentEmails)]; // Remove duplicates
+    const uniqueParentEmails = [...new Set(parentEmails)];
 
-    let emailRecipients = `<strong>${primaryRecipient}</strong>`;
+    let emailRecipientsText;
     if (uniqueParentEmails.length > 0) {
-        emailRecipients += ` ve veli/ebeveyn e-posta adres(ler)i <strong>${uniqueParentEmails.join(', ')}</strong>`;
+        const parentEmailsString = `<strong>${uniqueParentEmails.join(', ')}</strong>`;
+        // "and parent/guardian e-mail address(es)"
+        emailRecipientsText = `<strong>${primaryRecipient}</strong> ${translations.and_parent_email || 'and parent/guardian e-mail address(es)'} ${parentEmailsString}`;
+    } else {
+        emailRecipientsText = `<strong>${primaryRecipient}</strong>`;
     }
 
+    // Display the translated confirmation message
     confirmationMessage.innerHTML = `
-        <p>Ödemeniz başarıyla tamamlanmıştır.</p>
+        <p>${translations.payment_successful || 'Your payment has been successfully completed.'}</p>
         ${pnrLine}
         <div class="ticket-summary" style="border: 1px solid #ccc; padding: 15px; margin-top: 20px; border-radius: 5px;">
-            <h4 style="margin-top: 0;">Bilet Özeti</h4>
-            <p><strong>Nereden:</strong> ${bookingDetails.from}</p>
-            <p><strong>Nereye:</strong> ${bookingDetails.to}</p>
-            <p><strong>Gidiş Tarihi:</strong> ${bookingDetails.departureDate}</p>
-            ${bookingDetails.isRoundTrip ? `<p><strong>Dönüş Tarihi:</strong> ${bookingDetails.returnDate}</p>` : ''}
-            <p><strong>Yolcular:</strong> ${passengerNames}</p>
+            <h4 style="margin-top: 0;">${translations.ticket_summary || 'Ticket Summary'}</h4>
+            <p><strong>${translations.from || 'From'}:</strong> ${bookingDetails.from}</p>
+            <p><strong>${translations.to || 'To'}:</strong> ${bookingDetails.to}</p>
+            <p><strong>${translations.departure_date || 'Departure Date'}:</strong> ${bookingDetails.departureDate}</p>
+            ${bookingDetails.isRoundTrip ? `<p><strong>${translations.return_date || 'Return Date'}:</strong> ${bookingDetails.returnDate}</p>` : ''}
+            <p><strong>${translations.passengers || 'Passengers'}:</strong> ${passengerNames}</p>
         </div>
-        <p style="margin-top: 20px;">Bilet bilgilerinizin tüm detayları ${emailRecipients} adresine e-posta olarak gönderilmiştir.</p>
-        <p>İyi uçuşlar dileriz!</p>
+        <p style="margin-top: 20px;">${(translations.ticket_details_sent || 'All details of your ticket information')} ${emailRecipientsText} ${(translations.sent_to_email || 'have been sent as an e-mail to the address.')}</p>
+        <p>${translations.good_flight || 'We wish you a good flight!'}</p>
     `;
 
-    console.log('Final booking confirmed:', bookingDetails);
-    console.log(`(Simulated) Tickets sent to primary recipient: ${primaryRecipient}`);
+    // The home button event listener only needs to be added once.
+    if (!homeBtn.dataset.listenerAttached) {
+        homeBtn.addEventListener('click', () => {
+            sessionStorage.removeItem('bookingDetails');
+            sessionStorage.removeItem('paymentComplete');
+            window.location.href = 'welcome.html';
+        });
+        homeBtn.dataset.listenerAttached = 'true';
+    }
+}
 
-    // Handle home button click
-    homeBtn.addEventListener('click', () => {
-        // Clear all session data related to the booking
-        sessionStorage.removeItem('bookingDetails');
-        sessionStorage.removeItem('paymentComplete');
+// Listen for the custom 'languageChanged' event
+document.addEventListener('languageChanged', (event) => {
+    // The translations are in event.detail
+    renderConfirmationPage(event.detail);
+});
 
-        // Redirect to the welcome page
-        window.location.href = 'welcome.html';
-    });
+// Initial check in case the language is set before this script runs
+// This is a fallback - the primary mechanism is the event listener.
+document.addEventListener('DOMContentLoaded', () => {
+    // If translation.js has already run and set the language, we might have translations ready.
+    // However, the 'languageChanged' event is more reliable.
+    // The listener in translation.js will fire 'languageChanged' on DOMContentLoaded,
+    // which this script will then catch. So no initial call is strictly needed here.
 });

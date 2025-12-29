@@ -26,6 +26,10 @@ async function setLanguage(lang) {
     const translations = await loadTranslations(lang);
     translatePage(translations);
     document.documentElement.lang = lang; 
+
+    // Dispatch a custom event with the loaded translations
+    const event = new CustomEvent('languageChanged', { detail: translations });
+    document.dispatchEvent(event);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
