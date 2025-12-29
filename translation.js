@@ -12,11 +12,21 @@ async function loadTranslations(lang) {
 }
 
 function translatePage(translations) {
+    // Translate text content
     const translatableElements = document.querySelectorAll('[data-translate]');
     translatableElements.forEach(element => {
         const key = element.dataset.translate;
         if (translations && translations[key]) {
             element.textContent = translations[key];
+        }
+    });
+
+    // Translate title attributes
+    const titleElements = document.querySelectorAll('[data-translate-title]');
+    titleElements.forEach(element => {
+        const key = element.dataset.translateTitle;
+        if (translations && translations[key]) {
+            element.title = translations[key];
         }
     });
 }

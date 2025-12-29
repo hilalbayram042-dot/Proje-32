@@ -1,134 +1,136 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Page Elements
-    const backBtn = document.getElementById('back-btn');
-    const bookButtons = document.querySelectorAll('.book-btn');
 
-    // Modal Elements
-    const modal = document.getElementById('booking-modal');
-    const closeModalBtn = modal.querySelector('.close-button');
-    const confirmModalBtn = document.getElementById('confirm-booking-modal-btn');
-    const passengerCountInput = document.getElementById('passenger-count');
-    const seatClassRadios = document.querySelectorAll('input[name="seat-class"]');
-    const totalPriceDisplay = document.getElementById('total-price-display');
+    const flightsManager = {
+        // --- ELEMENTS ---
+        backBtn: document.getElementById('back-btn'),
+        bookButtons: document.querySelectorAll('.book-btn'),
+        modal: document.getElementById('booking-modal'),
+        closeModalBtn: null, // Init in init()
+        confirmModalBtn: document.getElementById('confirm-booking-modal-btn'),
+        passengerCountInput: document.getElementById('passenger-count'),
+        seatClassRadios: document.querySelectorAll('input[name="seat-class"]'),
+        totalPriceDisplay: document.getElementById('total-price-display'),
 
+        // --- STATE ---
+        translations: {},
+        currentFlightData: null,
+        BUSINESS_MULTIPLIER: 1.8,
 
-    // App State
-    let currentFlightData = null;
-    const BUSINESS_MULTIPLIER = 1.8;
+        // --- INITIALIZATION ---
+        init() {
+            this.closeModalBtn = this.modal.querySelector('.close-button');
+            this.addEventListeners();
+        },
 
-    // --- Functions ---
+        addEventListeners() {
+            // Listen for language changes to update UI elements
+            document.addEventListener('languageChanged', (e) => {
+                this.translations = e.detail;
+                // If modal is open, update the price display with the new currency
+                if (this.modal.style.display === 'block') {
+                    this.updateTotalPrice();
+                }
+            });
 
-    function openModalWithFlightData(flightElement) {
-        const flightInfo = flightElement.querySelector('.flight-info');
-        const flightPriceElement = flightElement.querySelector('.flight-price');
+            if (this.backBtn) {
+                this.backBtn.addEventListener('click', () => {
+                    window.location.href = 'index.html';
+                });
+            }
 
-        const fromToText = flightInfo.querySelector('h2').textContent;
-        const [from, to] = fromToText.split(' - ').map(s => s.trim());
-        
-        const dateText = Array.from(flightInfo.querySelectorAll('p')).find(p => p.textContent.startsWith('Tarih:')).textContent.replace('Tarih: ', '');
-        const timeText = Array.from(flightInfo.querySelectorAll('p')).find(p => p.textContent.startsWith('Saat:')).textContent.replace('Saat: ', '');
-        const priceText = flightPriceElement.querySelector('p').textContent;
-        const basePrice = parseInt(priceText.replace('Fiyat: ', '').replace(' TL', ''));
+            this.bookButtons.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const flightElement = event.target.closest('.flight');
+                    this.openModalWithFlightData(flightElement);
+                });
+            });
 
-        // Store the essential data of the clicked flight
-        currentFlightData = {
-            from,
-            to,
-            departureDate: dateText,
-            departureTime: timeText,
-            basePrice
-        };
-        
-        // Reset modal to defaults
-        passengerCountInput.value = 1;
-        document.getElementById('economy-class').checked = true;
+            this.closeModalBtn.addEventListener('click', () => this.modal.style.display = 'none');
+            window.addEventListener('click', (event) => {
+                if (event.target === this.modal) {
+                    this.modal.style.display = 'none';
+                }
+            });
 
-        // Update and show the modal
-        updateTotalPrice();
-        modal.style.display = 'block';
-    }
-    
-    function updateTotalPrice() {
-        if (!currentFlightData) return;
+            this.confirmModalBtn.addEventListener('click', () => this.confirmBooking());
+            this.passengerCountInput.addEventListener('input', () => this.updateTotalPrice());
+            this.seatClassRadios.forEach(radio => radio.addEventListener('change', () => this.updateTotalPrice()));
+        },
 
-        const passengerCount = parseInt(passengerCountInput.value);
-        const selectedClass = document.querySelector('input[name="seat-class"]:checked').value;
+        // --- CORE LOGIC ---
+        openModalWithFlightData(flightElement) {
+            // Read data directly from dataset attributes
+            const { from, to, date, time, price } = flightElement.dataset;
 
-        let pricePerPassenger = currentFlightData.basePrice;
-        if (selectedClass === 'Business') {
-            pricePerPassenger *= BUSINESS_MULTIPLIER;
+            this.currentFlightData = {
+                from,
+                to,
+                departureDate: date,
+                departureTime: time,
+                basePrice: parseInt(price)
+            };
+
+            // Reset modal to defaults
+            this.passengerCountInput.value = 1;
+            document.getElementById('economy-class').checked = true;
+
+            this.updateTotalPrice();
+            this.modal.style.display = 'block';
+        },
+
+        updateTotalPrice() {
+            if (!this.currentFlightData) return;
+
+            const passengerCount = parseInt(this.passengerCountInput.value);
+            const selectedClass = document.querySelector('input[name="seat-class"]:checked').value;
+
+            let pricePerPassenger = this.currentFlightData.basePrice;
+            if (selectedClass === 'Business') {
+                pricePerPassenger *= this.BUSINESS_MULTIPLIER;
+            }
+
+            const total = pricePerPassenger * passengerCount;
+            const currency = this.translations.currency || 'TL';
+            this.totalPriceDisplay.textContent = `${total.toFixed(0)} ${currency}`;
+        },
+
+        confirmBooking() {
+            if (!this.currentFlightData) {
+                alert(this.translations.error_occurred || "An error occurred. Please try again.");
+                return;
+            }
+
+            const passengerCount = parseInt(this.passengerCountInput.value);
+            const selectedClass = document.querySelector('input[name="seat-class"]:checked').value;
+
+            let pricePerPassenger = this.currentFlightData.basePrice;
+            if (selectedClass === 'Business') {
+                pricePerPassenger *= this.BUSINESS_MULTIPLIER;
+            }
+            const finalPrice = pricePerPassenger * passengerCount;
+
+            const seatPlaceholder = this.translations.seat_placeholder || 'Seat {seatNumber}';
+            const selectedSeats = Array.from({ length: passengerCount }, (_, i) => seatPlaceholder.replace('{seatNumber}', i + 1));
+
+            const bookingDetails = {
+                ...this.currentFlightData,
+                finalPrice: finalPrice,
+                airline: this.translations.unknown_airline || 'Unknown Airline',
+                flightNumber: this.translations.unknown || 'Unknown',
+                seatClass: selectedClass,
+                selectedSeats: selectedSeats,
+                isConnecting: false,
+                arrivalTime: this.translations.unknown || 'Unknown',
+                // Add passenger count for personal-info page
+                adults: passengerCount,
+                children: 0 // This page doesn't specify adults/children, so assume all are adults
+            };
+
+            sessionStorage.setItem('bookingDetails', JSON.stringify(bookingDetails));
+            window.location.href = 'personal-info.html';
         }
+    };
 
-        const total = pricePerPassenger * passengerCount;
-        totalPriceDisplay.textContent = `${total.toFixed(0)} TL`;
-    }
-
-    function confirmBooking() {
-        if (!currentFlightData) {
-            alert("Bir hata oluştu. Lütfen tekrar deneyin.");
-            return;
-        }
-
-        const passengerCount = parseInt(passengerCountInput.value);
-        const selectedClass = document.querySelector('input[name="seat-class"]:checked').value;
-        
-        let pricePerPassenger = currentFlightData.basePrice;
-        if (selectedClass === 'Business') {
-            pricePerPassenger *= BUSINESS_MULTIPLIER;
-        }
-        const finalPrice = pricePerPassenger * passengerCount;
-
-        // Create an array of seat placeholders
-        const selectedSeats = Array.from({ length: passengerCount }, (_, i) => `Koltuk ${i + 1}`);
-
-        const bookingDetails = {
-            ...currentFlightData,
-            finalPrice: finalPrice,
-            airline: 'Bilinmeyen Havayolu',
-            flightNumber: 'Bilinmiyor',
-            seatClass: selectedClass,
-            selectedSeats: selectedSeats,
-            isConnecting: false,
-            arrivalTime: 'Bilinmiyor'
-        };
-
-        // Save to sessionStorage
-        sessionStorage.setItem('bookingDetails', JSON.stringify(bookingDetails));
-
-        // Redirect to the personal information page
-        window.location.href = 'personal-info.html';
-    }
-
-
-    // --- Event Listeners ---
-
-    if (backBtn) {
-        backBtn.addEventListener('click', () => {
-            window.location.href = 'index.html';
-        });
-    }
-
-    // Open modal when any "Rezervasyon Yap" button is clicked
-    bookButtons.forEach(button => {
-        button.addEventListener('click', (event) => {
-            const flightElement = event.target.closest('.flight');
-            openModalWithFlightData(flightElement);
-        });
-    });
-
-    // Close Modal Logic
-    closeModalBtn.addEventListener('click', () => modal.style.display = 'none');
-    window.addEventListener('click', (event) => {
-        if (event.target === modal) {
-            modal.style.display = 'none';
-        }
-    });
-
-    // Modal Confirm Logic
-    confirmModalBtn.addEventListener('click', confirmBooking);
-    
-    // Update price display when options change
-    passengerCountInput.addEventListener('change', updateTotalPrice);
-    seatClassRadios.forEach(radio => radio.addEventListener('change', updateTotalPrice));
-
+    flightsManager.init();
 });
+
