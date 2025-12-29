@@ -8,23 +8,7 @@
     <link rel="stylesheet" href="welcome.css">
 </head>
 <body>
-    <nav class="navbar">
-        <ul class="nav-links">
-            <li><a href="reviews.html" data-translate="reviews_link">Değerlendirmeler</a></li>
-            <li><a href="membership.html" data-translate="membership_link">Üyelik Sayfası</a></li>
-            <li><a href="cancel-reservation.html" data-translate="cancel_reservation_link">Rezervasyon İptal</a></li>
-            <li><a href="flights.html" data-translate="flights_link">Uçuşlar</a></li>
-            <li><a href="reservation.html" data-translate="reservations_link">Rezervasyonlar</a></li>
-            <li><a href="contact.html" data-translate="contact_link">İletişim</a></li>
-        </ul>
-        <div class="language-selector">
-            <button class="language-btn" data-translate="language_button">Dil</button>
-            <ul class="language-dropdown">
-                <li><a href="#" data-lang="tr">Türkçe</a></li>
-                <li><a href="#" data-lang="en">English</a></li>
-            </ul>
-        </div>
-    </nav>
+
     <header>
         <h1 data-translate="register_heading">Üyelik Oluştur</h1>
     </header>
@@ -42,11 +26,11 @@
                 </div>
                 <div class="form-group">
                     <label for="regTc" data-translate="tc_number_label">TC Kimlik No:</label>
-                    <input type="text" id="regTc" name="regTc" pattern="[0-9]{11}" title="Please enter a valid 11-digit TC Kimlik No" required>
+                    <input type="text" id="regTc" name="regTc" pattern="[0-9]{11}" data-translate-title="tc_placeholder" required>
                 </div>
                 <div class="form-group">
                     <label for="regPhone" data-translate="phone_number_label">Telefon Numarası:</label>
-                    <input type="tel" id="regPhone" name="regPhone" pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number" required>
+                    <input type="tel" id="regPhone" name="regPhone" pattern="[0-9]{10}" data-translate-title="phone_placeholder" required>
                 </div>
                 <div class="form-group">
                     <label for="regEmail" data-translate="email_label">E-posta:</label>
